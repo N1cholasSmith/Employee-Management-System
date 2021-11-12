@@ -136,11 +136,110 @@ viewAllEmployees = () => {
 // ______________________________________________________________________________________________________________________
 // ADD
 // ADD DEPARTMENT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+addDepartment = () => {
 
+    const addDepartment = [
+        {
+            type:"text",
+            message:"What Department would you like to add?",
+            name: "departmentAdd"
+        },
+        {
+            type:"text",
+            message:"What is the Department ID?",
+            name: "departmentID"
+        }
+    ];
+    prompt(addDepartment)
+    .then((department)=> {
+        db.createDepartment(department)
+        .then(() => {
+            console.log(`Add Department ${department}`)
+        })
+        .then(() => {
+            userPrompts();
+        })
+    })
+
+}
 // ADD ROLE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+addRole = () => {
 
+    const addRole = [
+        {
+            type:"text",
+            message:"What is the role ID?",
+            name: "roleID"
+        },
+        {
+            type:"text",
+            message:"What is the Title of the role?",
+            name: "roleTitle"
+        },
+        {
+            type:"text",
+            message:"What is the Salary for this role?",
+            name: "roleSalary"
+        },
+        {
+            type:"text",
+            message:"What is the Salary for this role?",
+            name: "roleDepartmen"
+        },
+    ]
+    prompt(addRole)
+    .then((role)=> {
+        db.createRole(role)
+        .then(() => {
+            console.log(`Add ${role} Role`)
+        })
+        .then(() => {
+            userPrompts();
+        });
+    });
+    
+}
 // ADD EMPLOYEE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+addEmployee = () => {
 
+    const addEmployee = [
+        {
+            type:"text",
+            message:"What is the Employees ID?",
+            name: "employeeID"
+        },
+        {
+            type:"text",
+            message:"Employees FIRST Name?",
+            name: "employeeFirstName"
+        },
+        {
+            type:"text",
+            message:"Employees LAST Name?",
+            name: "employeeLastName"
+        },
+        {
+            type:"text",
+            message:"Employees ROLE ID?",
+            name: "employeeRoleID"
+        },
+        {
+            type:"text",
+            message:"Employees MANAGER ID?",
+            name: "employeeMangerID"
+        }
+    ]
+    prompt(addEmployee)
+    .then((employee)=> {
+        db.createRole(employee)
+        .then(() => {
+            console.log(`Add Employee - ${employee}`)
+        })
+        .then(() => {
+            userPrompts();
+        });
+    });
+}
 // ______________________________________________________________________________________________________________________
 // UPDATE
 // UPDATE EMPLOYEE DETAILS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
