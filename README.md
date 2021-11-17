@@ -18,6 +18,8 @@
 ## Description
 The Employee Management System is used to dynamically navigate through your companies database. A command line Content Management System interface allows the user to view the companies departments, roles and employees whilst offering the ability to manipulate the information in the database.
 
+https://user-images.githubusercontent.com/88865022/142196237-3fa7b3e5-c143-49f1-83ad-5287cc8de87e.mp4
+
 ---
 ## Technologies-Used
 - Node.js
