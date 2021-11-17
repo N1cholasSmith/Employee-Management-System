@@ -4,18 +4,18 @@ CREATE DATABASE company_db;
 -- Apply code to company database
 USE company_db;
 
--- Create departments table
+-- Creates the departments table
 CREATE TABLE departments (
     -- Auto increment id integer, set as primary key
     id INT AUTO_INCREMENT PRIMARY KEY,
-    -- Set department_name variable characters to 30 
+    -- Sets department_name variable characters to 30 
     department_name VARCHAR(30) NOT NULL
 );
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
-    -- Set salary 20 digits and 2 decimals 
+    -- Sets salary 20 digits and 2 decimals 
     salary DECIMAL(20,2) NOT NULL, 
     department_id INT, 
     -- Department ID relates to ID in departments table 

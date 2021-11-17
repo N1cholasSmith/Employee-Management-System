@@ -4,30 +4,6 @@ const { prompt } = require('inquirer');
 require('console.table');
 const util = require('util');
 
-// ..............................................................................
-// const mysql = require('mysql2');
-// const { allowedNodeEnvironmentFlags } = require('process');
-
-// // Connect to database 
-// const db = mysql.createConnection(
-//     {
-//         // MySQL username,
-//       host: process.env.DB_HOST,
-//       user: process.env.DB_USER,
-//       password: "p@ssword",
-//       database: process.env.DB_NAME
-//     },
-//     console.log(`Connected to the company_db database.`)
-// );
-
-// db.connect(err => {
-//     if (err) throw err;
-// });
-
-// module.exports = db; 
-// ........................................................................................................
-// db.query = util.promisify(db.query)
-
 // INITIAL PROMPTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const startMenu = async () => {
     try {
@@ -74,7 +50,7 @@ const startMenu = async () => {
                 await addEmployee();
                 break;
     
-            case "Update Employee Role":
+            case "Update an Employee":
                 await updateEmployee();
                 break;
     
@@ -85,11 +61,11 @@ const startMenu = async () => {
             default: 
                 // Clear inquirer terminal & ends the function
                 console.clear();
-                end();
+                process.exit();
             return; 
         };
     } catch(err) {
-        console.err("An error occurred:", err)
+        console.error("An error occurred:", err)
     }
 };
 
@@ -344,7 +320,7 @@ async function updateEmployee() {
     try {
 
         const employees =  await db.viewEmployees();
-        console.table(employees[0]);                //-----------------------------------------
+        // console.table(employees[0]);                //-----------------------------------------
     
         const employeeChoices =  employees[0].map((employees) => {
             return { 
@@ -363,7 +339,7 @@ async function updateEmployee() {
         ]);
     
         const roles = await db.viewRoles();
-        console.table(roles[0]);                    //---------------------------------------------
+        // console.table(roles[0]);                    //---------------------------------------------
     
         const roleChoices = roles[0].map((role) => {
             return {
@@ -381,8 +357,8 @@ async function updateEmployee() {
             },
         ]);
         
-        console.table(selectedEmployee)               //------------------------------------------
-        console.table(newRole)                        //------------------------------------------
+        // console.table(selectedEmployee)               //------------------------------------------
+        // console.table(newRole)                        //------------------------------------------
         await db.updateEmployeeDb(selectedEmployee, newRole)
         await viewEmployees();
     } catch(err) {
