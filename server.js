@@ -1,10 +1,8 @@
 require('dotenv').config();
 // const db = require('./db/connection.js');
-const inquirer = require('inquirer');
+const { prompt } = require('inquirer');
 require('console.table');
 const util = require('util');
-
-
 
 
 // Sets Port environment to variable PORT or 3001 
@@ -35,36 +33,72 @@ db.connect(err => {
 db.query = util.promisify(db.query)
 
 // INITIAL PROMPTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-startMenu = () => {
-    inquirer.prompt({
-        type: "list",
-        message: "Welcome to your Employee Management System, what would you like to do?",
-        choices: ["View all Departments", "View all Roles",
-                "View all Employees", "Add a Department",
-                "Add a Role", "Add an Employee", "Update an Employee", "Other Options?"],
-        name: "userChoice"
-    }).then((choices) => {
-        if(choices.userChoice === "View all Departments"){
-            viewDepartments();
-        } else if (choices.userChoice === "View all Roles"){
-            viewRoles();
-        } else if (choices.userChoice === "View all Employees"){
-            viewEmployees();
-        } else if (choices.userChoice === "Add a Department"){
-            addDepartment();
-        } else if (choices.userChoice === "Add a job Role"){
-            addRole();
-        } else if (choices.userChoice === "Add an Employee"){
-            addEmployee();
-        } else if (choices.userChoice === "Update an Employee"){
-            updateEmployee();
-        } else if (choices.userChoice === "Other Options?"){
-            moreChoices();
-        }
-    })
+const startMenu = async () => {
+    try {
+
+        const options = [
+            "View all Departments", "View all Roles",
+            "View all Employees", "Add a Department",
+            "Add a Role", "Add an Employee", 
+            "Update an Employee", "More Choices", "Exit"
+        ]; 
+    
+        const initialQuestions = [{
+            type: "list",
+            name: "choice",
+            message: "What would you like to do?",
+            choices: options
+        }];
+
+
+        const answers = await prompt(initialQuestions)
+    
+        switch(answers.choice) {
+            case "View all Departments":
+                await viewDepartments();
+                break;
+    
+            case "View all Roles":
+                await viewRoles();
+                break;
+    
+            case "View all Employees":
+                await viewEmployees();
+                break;
+    
+            case "Add a Department":
+                await addDepartment();
+                break;
+            
+            case "Add a Role":
+                await addRole();
+                break;
+    
+            case  "Add an Employee":
+                await addEmployee();
+                break;
+    
+            case "Update Employee Role":
+                await updateEmployee();
+                break;
+    
+            case "More Choices": 
+                await moreChoices();
+                break;
+    
+            default: 
+                // Clear inquirer terminal & ends the function
+                console.clear();
+                end();
+            return; 
+        };
+    } catch(err) {
+        console.err("An error occurred:", err)
+    }
 };
 
 // MORE CHOICES/PROMPTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 moreChoices = () => {
     inquirer.prompt({
         type: "list",
@@ -362,6 +396,9 @@ async function updateEmployee() {
 
 // ______________________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________________
+//  DELETE FUNCTIONS
+
+
 
 
 init();
