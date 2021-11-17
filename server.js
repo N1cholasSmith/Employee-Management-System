@@ -35,7 +35,7 @@ db.connect(err => {
 db.query = util.promisify(db.query)
 
 // INITIAL PROMPTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-userPrompts = () => {
+startMenu = () => {
     inquirer.prompt({
         type: "list",
         message: "Welcome to your Employee Management System, what would you like to do?",
@@ -45,11 +45,11 @@ userPrompts = () => {
         name: "userChoice"
     }).then((choices) => {
         if(choices.userChoice === "View all Departments"){
-            viewAllDepartments();
+            viewDepartments();
         } else if (choices.userChoice === "View all Roles"){
-            viewAllRoles();
+            viewRoles();
         } else if (choices.userChoice === "View all Employees"){
-            viewAllEmployees();
+            viewEmployees();
         } else if (choices.userChoice === "Add a Department"){
             addDepartment();
         } else if (choices.userChoice === "Add a job Role"){
@@ -113,140 +113,257 @@ userPrompts();
 // ______________________________________________________________________________________________________________________
 // VIEW
 // VIEW DEPARTMENTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-viewAllDepartments = () => {
-    db.query("Select * from departments") 
-        .then (data => {
-            console.table(data)
-        })
-}
+viewDepartments = () => {
+    try {
+        db.viewDepartments()
+    .then(([rows]) => {
+        let departments = rows;
+        console.table(departments);
+    })
+    .then(() => startMenu());
+    } catch(err) {
+        console.error("An error occurred:", err)
+    }
+};
+
 // VIEW ROLES  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-viewAllRoles = () => {
-    db.query("Select * from roles") 
-        .then (data => {
-            console.table(data)
-        })
-}
+viewRoles = () => {
+    try {
+        db.viewRoles()
+    .then(([rows]) => {
+        let roles = rows;
+        console.table(roles);
+    })
+    .then(() => startMenu()); 
+    } catch(err) {
+        console.error("An error occurred:", err);
+    };
+};
+
 // VIEW EMPLOYEES  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-viewAllEmployees = () => {
-    db.query("Select * from employees") 
-        .then (data => {
-            console.table(data)
-        })
-}
+viewEmployees = () => {
+    try {
+        db.viewEmployees()   
+   .then(([rows]) => {
+       let employees = rows;
+       console.table(employees);
+   })
+   .then(() => startMenu());
+   } catch(err) {
+       console.error("An error occurred:", err);
+   };
+};
+
 // ______________________________________________________________________________________________________________________
 // ADD
 // ADD DEPARTMENT >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 addDepartment = () => {
 
-    const addDepartment = [
-        {
-            type:"text",
-            message:"What Department would you like to add?",
-            name: "departmentAdd"
-        },
-        {
-            type:"text",
-            message:"What is the Department ID?",
-            name: "departmentID"
-        }
-    ];
-    prompt(addDepartment)
-    .then((department)=> {
-        db.createDepartment(department)
-        .then(() => {
-            console.log(`Add Department ${department}`)
-        })
-        .then(() => {
-            userPrompts();
-        })
-    })
+    try {
+        const addDepartment = [{
+      type: "text",
+      name: "department",
+      message: "What is the department name?",        
+  }];
+  prompt(addDepartment)
+  .then(({department}) => {
+      console.log(department);
+      db.createDepartment(department)
+      .then(() => {
+          console.log(`Added ${department} Department`)
+      })
+      .then(() => viewDepartments());
+  });
+  } catch(err) {
+      console.error("An error occurred:", err);
+  };
+};
 
-}
 // ADD ROLE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 addRole = () => {
 
-    const addRole = [
+    try {
+        const addRole = [
         {
-            type:"text",
-            message:"What is the role ID?",
-            name: "roleID"
+            type: "text",
+            name: "id",
+            message: "What is the role id? It must be a number",
+            validate: (input) => {
+                let userInput = parseInt(input);
+                return !Number.isNaN(userInput);
+            }
+            
         },
         {
-            type:"text",
-            message:"What is the Title of the role?",
-            name: "roleTitle"
+            type: "text",
+            name: "role",
+            message: "What is the title?",        
         },
         {
-            type:"text",
-            message:"What is the Salary for this role?",
-            name: "roleSalary"
+            type: "text",
+            name: "salary",
+            message: "What is the salary? (Can have up to two decimals)",
+            validate: (input) => {
+                let userInput = parseInt(input);
+                return !Number.isNaN(userInput);
+            }
         },
         {
-            type:"text",
-            message:"What is the Salary for this role?",
-            name: "roleDepartmen"
+            type: "text",
+            name: "departmentId",
+            message: "What is the department ID?",
+            default: "NULL"
         },
-    ]
+    ];
     prompt(addRole)
-    .then((role)=> {
+    .then((role) => {
+        console.log(role);
         db.createRole(role)
         .then(() => {
-            console.log(`Add ${role} Role`)
+            console.log(`Added role ${role}`)
         })
-        .then(() => {
-            userPrompts();
-        });
+        .then(() => viewRoles());
     });
+    } catch(err) {
+        console.error("An error occurred:", err);
+    }
     
-}
+};
+
 // ADD EMPLOYEE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 addEmployee = () => {
+    try {
 
-    const addEmployee = [
-        {
-            type:"text",
-            message:"What is the Employees ID?",
-            name: "employeeID"
-        },
-        {
-            type:"text",
-            message:"Employees FIRST Name?",
-            name: "employeeFirstName"
-        },
-        {
-            type:"text",
-            message:"Employees LAST Name?",
-            name: "employeeLastName"
-        },
-        {
-            type:"text",
-            message:"Employees ROLE ID?",
-            name: "employeeRoleID"
-        },
-        {
-            type:"text",
-            message:"Employees MANAGER ID?",
-            name: "employeeMangerID"
-        }
-    ]
-    prompt(addEmployee)
-    .then((employee)=> {
-        db.createRole(employee)
-        .then(() => {
-            console.log(`Add Employee - ${employee}`)
-        })
-        .then(() => {
-            userPrompts();
+        //query db to display all managers 
+        db.getManagers()
+        .then(([rows]) => {
+            let managers = rows;
+    
+            // query db to display all roles 
+            db.viewRoles()
+            .then(([roles]) => {
+                const managerChoices = [
+                    {
+                        // In the event that the added employee is a manager
+                        name: "No manager",
+                        value: "NULL"
+                    },
+                ]
+    
+                // Push all managers from db into managerChoice array
+                managers.forEach((manager) => {
+                    managerChoices.push({
+                        name: manager.first_name  + " " + manager.last_name,
+                        value: manager.id                  
+                    });
+                });
+    
+               const addEmployee = [
+                {
+                    type: "text",
+                    name: "first",
+                    message: "What is the employee's first name?",        
+                },
+                {
+                    type: "text",
+                    name: "last",
+                    message: "What is the employee's last name?",
+                },
+                {
+                    type: "list",
+                    name: "roleId",
+                    message: "What is the role?",
+                    choices: 
+                        // for every choice an array 
+                    roles.map((role) => {
+                        // roles array contains all the coloumns & 
+                        return {
+                            name: role.title,
+                            value: role.id
+                        };
+                    })
+                },
+                {
+                    type: "list",
+                    name: "managerId",
+                    message: "Who is the manager?",
+                    choices: managerChoices
+                },
+            ];  
+            prompt(addEmployee)
+            .then((employee) => {
+                console.log(employee);
+                db.createEmployee(employee)
+                .then(() => {
+                    console.log(`Added employee ${employee}`)
+                })
+                .then(() => viewEmployees());
+    
+                });
+            });
         });
-    });
-}
+    } catch (err) {
+       console.error("An error occurred:", err);
+    }
+};
+
 // ______________________________________________________________________________________________________________________
 // UPDATE
 // UPDATE EMPLOYEE DETAILS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+async function updateEmployee() {
+    try {
 
+        const employees =  await db.viewEmployees();
+        console.table(employees[0]);                //-----------------------------------------
+    
+        const employeeChoices =  employees[0].map((employees) => {
+            return { 
+                name: employees.first_name + " " + employees.last_name,
+                value: employees.id
+            }; 
+        });
+    
+        const selectedEmployee = await prompt([
+            {
+                type: "list",
+                name: "employeeId",
+                message: "Which employee would you like to update?",
+                choices: employeeChoices
+            },
+        ]);
+    
+        const roles = await db.viewRoles();
+        console.table(roles[0]);                    //---------------------------------------------
+    
+        const roleChoices = roles[0].map((role) => {
+            return {
+                name: role.title,
+                value: role.id
+            }
+        });
+    
+        const newRole = await prompt([
+            {
+                type: "list",
+                name: "roleId",
+                message: "What is their new role?",
+                choices: roleChoices
+            },
+        ]);
+        
+        console.table(selectedEmployee)               //------------------------------------------
+        console.table(newRole)                        //------------------------------------------
+        await db.updateEmployeeDb(selectedEmployee, newRole)
+        await viewEmployees();
+    } catch(err) {
+        console.error("An error occurred:", err);
+    };
+};
 
 // ______________________________________________________________________________________________________________________
 // ______________________________________________________________________________________________________________________
 
 
 init();
+
+module.exports = { startMenu }
