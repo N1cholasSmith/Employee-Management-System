@@ -1,32 +1,28 @@
 require('dotenv').config();
-// const db = require('./db/connection.js');
+const db = require('./db/connection.js');
 const { prompt } = require('inquirer');
 require('console.table');
 const util = require('util');
 
-
-// Sets Port environment to variable PORT or 3001 
-const PORT = process.env.PORT || 3001;
-
 // ..............................................................................
-const mysql = require('mysql2');
-const { allowedNodeEnvironmentFlags } = require('process');
+// const mysql = require('mysql2');
+// const { allowedNodeEnvironmentFlags } = require('process');
 
-// Connect to database 
-const db = mysql.createConnection(
-    {
-        // MySQL username,
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: "p@ssword",
-      database: process.env.DB_NAME
-    },
-    console.log(`Connected to the company_db database.`)
-);
+// // Connect to database 
+// const db = mysql.createConnection(
+//     {
+//         // MySQL username,
+//       host: process.env.DB_HOST,
+//       user: process.env.DB_USER,
+//       password: "p@ssword",
+//       database: process.env.DB_NAME
+//     },
+//     console.log(`Connected to the company_db database.`)
+// );
 
-db.connect(err => {
-    if (err) throw err;
-});
+// db.connect(err => {
+//     if (err) throw err;
+// });
 
 // module.exports = db; 
 // ........................................................................................................

@@ -28,6 +28,7 @@ VALUES
 ;
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES
     ("Kelvin", "Cracker", 10, NULL),
     ("Mitchel", "Trickey", 20, 1),
     ("Zac", "Collard", 30, NULL),
@@ -38,9 +39,9 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id)
     ("Dale", "Braniff", 80, NULL),
     ("Kyle", "Hope", 90, 8),
     ("Emma", "Walter", 100, 8),
-    ("James", "Mikler", 110, NULL)
-    ("Brodee", "Hoare", 120, 11)
-    ("Darcy", "Lahey", 130, NULL)
+    ("James", "Mikler", 110, NULL),
+    ("Brodee", "Hoare", 120, 11),
+    ("Darcy", "Lahey", 130, NULL),
     ("Michael", "Dun", 140, 13)
 ;
    
