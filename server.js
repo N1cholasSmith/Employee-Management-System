@@ -1,5 +1,5 @@
 require('dotenv').config();
-const db = require('./db/connection.js');
+const db = require('./db/index.js');
 const { prompt } = require('inquirer');
 require('console.table');
 const util = require('util');
@@ -26,7 +26,7 @@ const util = require('util');
 
 // module.exports = db; 
 // ........................................................................................................
-db.query = util.promisify(db.query)
+// db.query = util.promisify(db.query)
 
 // INITIAL PROMPTS  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 const startMenu = async () => {
@@ -118,7 +118,7 @@ moreChoices = () => {
         } else if (choices.userChoice === "Delete Employee"){
             deleteEmployee();
         } else {
-            userPrompts();
+            startMenu();
         }
     })
 };
