@@ -64,13 +64,13 @@ To navigate through your databases Departments, Roles and Employees simply follo
 ---
 ## How to Contribute
 
-Please refer to link for guidelines & Contributor Covenant Code Of Conduct [NoteTaker](https://www.contributor-covenant.org/)
+Please refer to link for guidelines & Contributor Covenant Code Of Conduct [EmployeeManagementSystem](https://www.contributor-covenant.org/)
 
 ---
 ## License
 MIT License
 
-Copyright (c) [2021] [NoteTaker]
+Copyright (c) [2021] [EmployeeManagementSystem]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
